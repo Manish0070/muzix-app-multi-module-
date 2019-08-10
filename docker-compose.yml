@@ -1,0 +1,29 @@
+version: "3"
+services:
+  docker-mongo:
+    image: mongo
+    container_name: mongo-docker
+    ports:
+      - "27017:27017"
+
+  muzix-track:
+    build: track-service/
+    restart: always
+    container_name: muzix-track
+    links:
+      - docker-mongo
+      - config-server
+      - eureka-server
+    depends_on:
+      - docker-mongo
+      - config-server
+
+  config-server:
+    build: configuration-server/
+    restart: always
+    container_name: config-server
+
+  eureka-server:
+    build: eureka-server/
+    restart: always
+    container_name: eureka-server
